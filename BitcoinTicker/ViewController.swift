@@ -47,7 +47,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
 //        print(currencyArray[row])
         finalURL = baseURL + currencyArray[row]
-//        print(finalURL)
+//        print(finalURL) // https://apiv2.bitcoinaverage.com/indices/global/ticker/BTCUSD
         getBitcoinPriceData(url: finalURL)
     }
     
@@ -68,7 +68,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                     print("Sucess! Got the price data")
                     let priceJSON : JSON = JSON(response.result.value!)
 
-//                    self.updatePriceData(json: priceJSON)
+                    self.updatePriceData(json: priceJSON)
 
                 } else {
                     print("Error: \(String(describing: response.result.error))")
@@ -77,27 +77,24 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             }
 
     }
-//
-//    
-//    
-//    
-//    
-//    //MARK: - JSON Parsing
-//    /***************************************************************/
-//    
-//    func updateWeatherData(json : JSON) {
-//        
-//        if let tempResult = json["main"]["temp"].double {
-//        
-//        weatherData.temperature = Int(round(tempResult!) - 273.15)
-//        weatherData.city = json["name"].stringValue
-//        weatherData.condition = json["weather"][0]["id"].intValue
-//        weatherData.weatherIconName =    weatherData.updateWeatherIcon(condition: weatherData.condition)
-//        }
-//        
-//        updateUIWithWeatherData()
-//    }
-//    
+
+    
+    
+    
+    
+    //MARK: - JSON Parsing
+    /***************************************************************/
+    
+    func updatePriceData(json : JSON) {
+        
+        if let priceResult = json["last"].double {
+            bitcoinPriceLabel.text = String(priceResult)
+            
+        } else {
+            bitcoinPriceLabel.text = "No data available"
+        }
+    }
+    
 
 
 
