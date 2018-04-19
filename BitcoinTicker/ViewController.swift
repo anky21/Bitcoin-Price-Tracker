@@ -23,7 +23,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     let baseURL = "https://apiv2.bitcoinaverage.com/indices/global/ticker/BTC"
     let currencyArray = ["AUD", "BRL","CAD","CNY","EUR","GBP","HKD","IDR","ILS","INR","JPY","MXN","NOK","NZD","PLN","RON","RUB","SEK","SGD","USD","ZAR"]
+    let symbolArray = ["$", "R$", "$", "¥", "€", "£", "$", "Rp", "₪", "₹", "¥", "$", "kr", "$", "zł", "lei", "₽", "kr", "$", "$", "R"]
     var finalURL = ""
+    var selectedRow : Int = 0
 
     //Pre-setup IBOutlets
     @IBOutlet weak var bitcoinPriceLabel: UILabel!
@@ -35,6 +37,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         super.viewDidLoad()
         currencyPicker.dataSource = self
         currencyPicker.delegate = self
+        
+        finalURL = baseURL + currencyArray[0]
+        getBitcoinPriceData(url: finalURL)
        
     }
 
@@ -49,6 +54,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         finalURL = baseURL + currencyArray[row]
 //        print(finalURL) // https://apiv2.bitcoinaverage.com/indices/global/ticker/BTCUSD
         getBitcoinPriceData(url: finalURL)
+        selectedRow = row
     }
     
 
@@ -65,7 +71,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             .responseJSON { response in
                 if response.result.isSuccess {
 
-                    print("Sucess! Got the price data")
+//                    print("Sucess! Got the price data")
                     let priceJSON : JSON = JSON(response.result.value!)
 
                     self.updatePriceData(json: priceJSON)
@@ -88,7 +94,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     func updatePriceData(json : JSON) {
         
         if let priceResult = json["last"].double {
-            bitcoinPriceLabel.text = String(priceResult)
+            bitcoinPriceLabel.text = symbolArray[selectedRow] + String(priceResult)
             
         } else {
             bitcoinPriceLabel.text = "No data available"
